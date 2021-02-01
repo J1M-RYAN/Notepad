@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>images/save.svg</file>
+        <file>images/corner-left-down.svg</file>
+        <file>images/corner-up-right.svg</file>
+        <file>images/clipboard.svg</file>
+        <file>images/book-open.svg</file>
+        <file>images/file-plus.svg</file>
+        <file>images/scissors.svg</file>
+        <file>images/copy.svg</file>
+        <file>images/info.svg</file>
+        <file>images/corner-up-left.svg</file>
+        <file>images/log-out.svg</file>
+    </qresource>
+</RCC>

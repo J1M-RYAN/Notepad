@@ -38,8 +38,13 @@ private slots:
 
     void on_actionAbout_Notepad_triggered();
 
+    void on_plainTextEdit_textChanged();
+
+    void on_actionChange_Font_Size_triggered();
+
 private:
     Ui::Notepad *ui;
     QString filePath;
+
 };
 #endif // NOTEPAD_H

@@ -5,12 +5,22 @@
 #include <QTextStream>
 #include <QDir>
 #include <QMessageBox>
+#include <iostream>
+#include <QInputDialog>
+
+using namespace std;
+
 Notepad::Notepad(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Notepad)
 {
     ui->setupUi(this);
     this->setCentralWidget(ui->plainTextEdit);
+    ui->menubar->setStyleSheet("background-color: bisque");
+    ui->toolBar->setStyleSheet("background-color: lightblue");
+    ui->menuSettings->setIcon(QIcon(":/res/images/settings.svg"));
+
+
 }
 
 Notepad::~Notepad()
@@ -36,12 +46,19 @@ void Notepad::on_actionOpen_triggered()
   QTextStream in(&file);
   QString text = in.readAll();
   ui->plainTextEdit->setPlainText(text);
+  QString path = file.fileName();
+  QString fileTitle = path.section("/",-1,-1);
+
+  ui->statusbar->showMessage(fileTitle);
   file.close();
 }
 
 void Notepad::on_actionSave_triggered()
 {
-
+    if(filePath==""){
+        Notepad::on_actionSave_As_triggered();
+        return;
+    }
     QFile file(filePath);
     if(!file.open(QFile::WriteOnly|QFile::Text)){
           QMessageBox::warning(this, "File Not Open", "Your file has not been opened");
@@ -63,6 +80,10 @@ void Notepad::on_actionSave_As_triggered()
           QMessageBox::warning(this, "File Not Open", "Your file has not been opened");
           return;
     }
+    QString path = file.fileName();
+    QString fileTitle = path.section("/",-1,-1);
+
+    ui->statusbar->showMessage(fileTitle);
     QTextStream out(&file);
     QString text = ui->plainTextEdit->toPlainText();
     out << text;
@@ -103,4 +124,41 @@ void Notepad::on_actionExit_triggered()
 void Notepad::on_actionAbout_Notepad_triggered()
 {
     QMessageBox::about(this, "About Notepad", "This is a simple notepad app made in the Qt C++ framework");
+}
+
+void Notepad::on_plainTextEdit_textChanged()
+{
+    QString statusBarText = "";
+    if(filePath==""){
+
+        ui->plainTextEdit->toPlainText()==""?statusBarText= "Welcome  to Notepad":statusBarText="*";
+        ui->statusbar->showMessage(statusBarText);
+        return;
+    }
+    QFile file(filePath);
+    if(!file.open(QFile::ReadOnly|QFile::Text)){
+          return;
+    }
+    QTextStream in(&file);
+    QString textInFile = in.readAll();
+    QString textInEditor = ui->plainTextEdit->toPlainText();
+    QString path = file.fileName();
+    statusBarText = path.section("/",-1,-1);
+    if (textInFile!=textInEditor){
+        statusBarText+= "*";
+    }
+    ui->statusbar->showMessage(statusBarText);
+
+}
+
+
+
+
+void Notepad::on_actionChange_Font_Size_triggered()
+{
+    int currentFontSize = ui->plainTextEdit->fontInfo().pointSize();
+    QString family = ui->plainTextEdit->fontInfo().family();
+    int chosenFontSize = QInputDialog::getInt(this, "Chose font size", "Chose font Size", currentFontSize,0,100 );
+    QFont newFont(family,chosenFontSize);
+    ui->plainTextEdit->setFont(newFont);
 }

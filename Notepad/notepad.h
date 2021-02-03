@@ -42,6 +42,8 @@ private slots:
 
     void on_actionChange_Font_Size_triggered();
 
+    void on_tabWidget_currentChanged(int index);
+
 private:
     Ui::Notepad *ui;
     QString filePath;

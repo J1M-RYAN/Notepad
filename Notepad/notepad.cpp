@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <iostream>
 #include <QInputDialog>
+#include <QPlainTextEdit>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ Notepad::Notepad(QWidget *parent)
     , ui(new Ui::Notepad)
 {
     ui->setupUi(this);
-    this->setCentralWidget(ui->plainTextEdit);
+
     ui->menubar->setStyleSheet("background-color: bisque");
     ui->statusbar->setStyleSheet("background-color: bisque");
     ui->toolBar->setStyleSheet("background-color: lightblue");
@@ -24,6 +25,9 @@ Notepad::Notepad(QWidget *parent)
     removeToolBar(toolbar);
     addToolBar(Qt::LeftToolBarArea, toolbar);
     toolbar->show();
+    ui->tabWidget->setTabText(1,"+");
+    ui->tabWidget->setContentsMargins(0,0,0,0);
+
 
 
 }
@@ -166,4 +170,16 @@ void Notepad::on_actionChange_Font_Size_triggered()
     int chosenFontSize = QInputDialog::getInt(this, "Chose font size", "Chose font Size", currentFontSize,0,100 );
     QFont newFont(family,chosenFontSize);
     ui->plainTextEdit->setFont(newFont);
+}
+
+void Notepad::on_tabWidget_currentChanged(int index)
+{
+    int totalTabs{ui->tabWidget->count()};
+    if(totalTabs-1==index){
+        QString newTabTitle =   "Tab "+ QString::number(totalTabs);
+        ui->tabWidget->insertTab(totalTabs-1,new QPlainTextEdit(),newTabTitle);
+        ui->tabWidget->setCurrentIndex(totalTabs-1);
+    }
+
+
 }

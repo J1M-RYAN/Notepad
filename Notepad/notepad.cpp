@@ -17,8 +17,13 @@ Notepad::Notepad(QWidget *parent)
     ui->setupUi(this);
     this->setCentralWidget(ui->plainTextEdit);
     ui->menubar->setStyleSheet("background-color: bisque");
+    ui->statusbar->setStyleSheet("background-color: bisque");
     ui->toolBar->setStyleSheet("background-color: lightblue");
     ui->menuSettings->setIcon(QIcon(":/res/images/settings.svg"));
+    auto toolbar = ui->toolBar;
+    removeToolBar(toolbar);
+    addToolBar(Qt::LeftToolBarArea, toolbar);
+    toolbar->show();
 
 
 }

@@ -15,8 +15,9 @@ Notepad::Notepad(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Notepad)
 {
-    ui->setupUi(this);
 
+
+    ui->setupUi(this);
     ui->menubar->setStyleSheet("background-color: bisque");
     ui->statusbar->setStyleSheet("background-color: bisque");
     ui->toolBar->setStyleSheet("background-color: lightblue");
@@ -27,7 +28,11 @@ Notepad::Notepad(QWidget *parent)
     toolbar->show();
     ui->tabWidget->setTabText(1,"+");
     ui->tabWidget->setContentsMargins(0,0,0,0);
-
+    ui->tabWidget->removeTab(0);
+    ui->tabWidget->insertTab(0,new QPlainTextEdit(),"Tab 1");
+     delete ui->tabWidget->widget(1);
+    ui->tabWidget->insertTab(1,new QPlainTextEdit(),"+");
+    ui->plainTextEdit->hide();
 
 
 }
@@ -54,11 +59,18 @@ void Notepad::on_actionOpen_triggered()
   }
   QTextStream in(&file);
   QString text = in.readAll();
-  ui->plainTextEdit->setPlainText(text);
-  QString path = file.fileName();
+
+
+
+QPlainTextEdit *qpte = qobject_cast<QPlainTextEdit *>(ui->tabWidget->currentWidget());
+qpte->setPlainText(text);
+
+QString path = file.fileName();
   QString fileTitle = path.section("/",-1,-1);
 
   ui->statusbar->showMessage(fileTitle);
+  ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), fileTitle);
+
   file.close();
 }
 

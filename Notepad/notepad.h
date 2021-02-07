@@ -2,7 +2,6 @@
 #define NOTEPAD_H
 
 #include <QMainWindow>
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class Notepad; }
 QT_END_NAMESPACE
@@ -44,9 +43,15 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
 
+    void setValue(int value);
+
+
+
 private:
     Ui::Notepad *ui;
     QString filePath;
+signals:
+    void textChanged(int newText);
 
 };
 #endif // NOTEPAD_H
